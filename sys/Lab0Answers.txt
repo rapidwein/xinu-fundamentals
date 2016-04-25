@@ -1,0 +1,41 @@
+1.      Program text segment  : 0x0      - 0x895a
+	Program data segment  : 0x895e   - 0xb100
+	Program bss segment   : 0xb104   - 0x10d78
+	Program free space    : 0x10d7c  - 0xffdff8
+	Program Stack space   : 0xffeff8 - 0xffdffc
+											     stack limit
+0x0         etext(0x895a)    edata(0xb100)    end(ox10d78)            	  stack size	     for main(0xffdffc)  stack base(0xffeff8)
+-------------------------------------------------------------------------------------------------------------------------
+|               |               |               |               |               |                   |			|
+|      TEXT     |     DATA      |     BSS       |     HEAP      |     FREE      |     		    |		STACK   |
+|               |               |               |               |               | 		    |	     for main   |
+-------------------------------------------------------------------------------------------------------------------------
+
+
+
+2.	Stack TOP address before calling printtos() : 0xffefc0
+	Stack TOP address  after calling printtos() : 0xffefb0
+	Difference = 0x10
+
+     0xffefbc	base pointer (ebp)->0xffefb8                top of the stack(esp)->0xffefb0
+	---------------------------------------------------------------------------------
+	|     (0x42f9)  |   (0xffefec)  |      			        |               |               
+	|     return    |     saved     |       Local variables       	|   stack data  |
+	|      ADDR     |      EBP      |     and other parameters      |    		|
+	---------------------------------------------------------------------------------
+
+
+3. The host machine uses a little-endian byte order. In zfunction.S, the computations required bit manipulation. Hence from the result of executing zfunction it was understood that the bits are stored from left to right as in the case of little-endian systems.
+
+4. 'mov' : Copies the source operand to the destination operand. The source operand can be an immediate value, general-purpose register, segment register, or memory location; the destination register can be a general-purpose register, segment register, or memory location.
+
+'push' : Decrements the stack pointer and then stores the source operand on the top of the stack. The operand size determines the amount by which the stack pointer is decremented.
+
+'pusha' : pushes the content of the general-purpose registers to the stack. It is basically a push-all instruction. It is used for 16bit operands.
+
+'pop' : loads the value from the top of the stack to the location specified with the destination operation and then increments the stack pointer.
+
+'popa' : pops from the stack into the general-purpose registers. It is a basically a pop-all instruction. It is used for 16bit operands.
+
+
+5. No. The compiler optimisation -O moves all the local variables into registers from the stack. Hence, the local variables below the top of the stack aren't seen.
